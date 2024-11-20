@@ -45,6 +45,9 @@ typedef void (*ResponseCallback)(const char *);
  * @param callback
  * @param data to send forexaample "name=remzi&age=25"
  * @param post_path path to send post request for example "/user.php"
+ *
+ *example:
+ *    send_http_post_request(handle_response, "name=remzi", "user.php");
  */
  void send_http_post_request(ResponseCallback callback, const char *data, const char  *post_path);
 
