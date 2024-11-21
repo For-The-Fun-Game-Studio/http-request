@@ -152,3 +152,32 @@ void send_http_post_request(ResponseCallback callback, const char *data, const c
   // Start the thread----------------------------------------------------------
   pthread_join(thread, NULL);
 }
+
+void get_value_from_api_response(const char *response, const char *key, char *value) {
+    size_t key_length = strlen(key);
+    size_t response_length = strlen(response);
+
+    for (size_t i = 0; i < response_length; ++i) {
+        // Check if the key matches at the current position
+        if (strncmp(&response[i], key, key_length) == 0 && response[i + key_length] == '"') {
+            // Locate the start of the value
+            const char *value_start = &response[i + key_length + 3]; // Skip `key"` and `:"`
+            const char *value_end = strchr(value_start, '"');
+            if (!value_end) {
+                fprintf(stderr, "Error: Key value not properly terminated in response\n");
+                return;
+            }
+
+            // Calculate the size of the value
+            size_t value_size = value_end - value_start;
+
+
+            strncpy(value, value_start, value_size);
+            (value)[value_size] = '\0'; // Null-terminate the string
+
+            return;
+        }
+    }
+
+    fprintf(stderr, "Error: Key not found in response\n");
+}
