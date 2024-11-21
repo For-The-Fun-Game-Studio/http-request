@@ -31,8 +31,8 @@ char *construct_http_post_request(const char *data, char *post_path) {
   int sock;
   struct sockaddr_in server;                                            // Struct to hold server details
   struct addrinfo hints, *res;                                          // Structs to hold address info
-  static char response[4096];                                           // Buffer for the HTTP response
-  static char request[2048];                                            // Buffer for the HTTP request
+  char response[4096];                                           // Buffer for the HTTP response
+  char request[2048];                                            // Buffer for the HTTP request
   ssize_t bytes_received;
 
   // Resolve domain name to IP--------------------------------------------------
