@@ -51,4 +51,13 @@ typedef void (*ResponseCallback)(const char *);
  */
  void send_http_post_request(ResponseCallback callback, const char *data, const char  *post_path);
 
+/**
+* Get the value of the key from the response
+* @param response The response from the server
+* @param key The key to get the value
+* @param value The value of the key
+*/
+void get_value_from_api_response(const char *response, const char *key, char *value);
+
+
 #endif // FATIO_HTTP_REQUEST_MANAGER_H
