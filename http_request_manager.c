@@ -169,7 +169,7 @@ void get_value_from_api_response(const char *response, const char *key, char *va
         return;
     }
 
-    for (size_t i = 0; i < response_length; ++i) {
+    for (size_t i = start_of_json; i < response_length; ++i) {
         // Check if the key matches at the current position
         if (strncmp(&response[i], key, key_length) == 0 && response[i + key_length] == '"') {
             // Locate the start of the value
