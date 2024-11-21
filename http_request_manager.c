@@ -186,5 +186,10 @@ void get_value_from_api_response(const char *response, const char *key, char *va
         }
     }
 
+    if (is_json_found == false) {
+        fprintf(stderr, "Error: Response does not contain json\n");
+        return;
+    }
+
     fprintf(stderr, "Error: Key not found in response\n");
 }
