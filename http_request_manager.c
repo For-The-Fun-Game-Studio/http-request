@@ -156,6 +156,17 @@ void send_http_post_request(ResponseCallback callback, const char *data, const c
 void get_value_from_api_response(const char *response, const char *key, char *value) {
     size_t key_length = strlen(key);
     size_t response_length = strlen(response);
+      size_t star_of_json = 0;
+    for (size_t i = 0; i < response_length; ++i) {
+        if (response[i] == '{') {
+            star_of_json = i;
+            break;
+        }
+    }
+    if (star_of_json == 0) {
+        fprintf(stderr, "Error: Response does not contain json\n");
+        return;
+    }
 
     for (size_t i = 0; i < response_length; ++i) {
         // Check if the key matches at the current position
