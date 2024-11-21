@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <pthread.h>
+#include <stdbool.h>
 
 
 /**
@@ -156,38 +157,32 @@ void send_http_post_request(ResponseCallback callback, const char *data, const c
 void get_value_from_api_response(const char *response, const char *key, char *value) {
     size_t key_length = strlen(key);
     size_t response_length = strlen(response);
-  //Check is response containing json data
-      size_t star_of_json = 0;
-    for (size_t i = 0; i < response_length; ++i) {
-        if (response[i] == '{') {
-            star_of_json = i;
-            break;
-        }
-    }
-    if (star_of_json == 0) {
-        fprintf(stderr, "Error: Response does not contain json\n");
-        return;
-    }
+    bool is_json_found = false;
 
     for (size_t i = start_of_json; i < response_length; ++i) {
-        // Check if the key matches at the current position
-        if (strncmp(&response[i], key, key_length) == 0 && response[i + key_length] == '"') {
-            // Locate the start of the value
-            const char *value_start = &response[i + key_length + 3]; // Skip `key"` and `:"`
-            const char *value_end = strchr(value_start, '"');
-            if (!value_end) {
-                fprintf(stderr, "Error: Key value not properly terminated in response\n");
+        if (is_json_found == false && response[i] == '{') {
+            is_json_found = true;
+        } else if (is_json_found ==
+                   true) {        // Check if the key matches at the current position
+            if (strncmp(&response[i], key, key_length) == 0 && response[i + key_length] == '"') {
+                // Locate the start of the value
+                const char *value_start = &response[i + key_length + 3]; // Skip `key"` and `:"`
+                const char *value_end = strchr(value_start, '"');
+                if (!value_end) {
+                    fprintf(stderr, "Error: Key value not properly terminated in response\n");
+                    return;
+                }
+
+                // Calculate the size of the value
+                size_t value_size = value_end - value_start;
+
+
+                strncpy(value, value_start, value_size);
+                (value)[value_size] = '\0'; // Null-terminate the string
+
                 return;
             }
-
-            // Calculate the size of the value
-            size_t value_size = value_end - value_start;
-
-
-            strncpy(value, value_start, value_size);
-            (value)[value_size] = '\0'; // Null-terminate the string
-
-            return;
+        }
         }
     }
 
