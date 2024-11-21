@@ -28,7 +28,7 @@ typedef struct {
  * @param data The data to send in the POST request
  * @return The response from the server
  */
-char *construct_http_post_request(const char *data, char *post_path) {
+static char *construct_http_post_request(const char *data, char *post_path) {
   int sock;
   struct sockaddr_in server;                                            // Struct to hold server details
   struct addrinfo hints, *res;                                          // Structs to hold address info
@@ -110,7 +110,7 @@ char *construct_http_post_request(const char *data, char *post_path) {
  * @param arg The data to pass to the thread
  * @return NULL
  */
-void *perform_request(void *arg) {
+static void *perform_request(void *arg) {
   // Cast the argument to ThreadData comes from the main thread
   ThreadData *data = (ThreadData *)arg;
 
